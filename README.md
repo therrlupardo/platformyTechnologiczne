@@ -1,1 +1,1 @@
-"# Platormy technologiczne " 
+# Platormy technologiczne
