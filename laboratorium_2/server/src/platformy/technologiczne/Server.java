@@ -59,7 +59,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello");
         Integer nThreads;
         if (args.length > 0){
             nThreads = Integer.parseInt(args[0]);
@@ -67,6 +66,8 @@ public class Server {
         else{
             nThreads = 8;
         }
+
+        System.out.println("Server is running on port " + port + " and able to manage " + nThreads + " clients");
         ExecutorService executorService = Executors.newFixedThreadPool(nThreads);
 
         try(ServerSocket serverSocket = new ServerSocket(port)){
@@ -77,7 +78,7 @@ public class Server {
                         try{
                             Server.downloadFile(socket);
                         } catch (IOException e){
-                            System.out.println("Problem with downloading: " + e.getMessage());
+                           System.out.println("Problem with downloading: " + e.getMessage());
                         }
                     });
                 } catch(IOException e){
