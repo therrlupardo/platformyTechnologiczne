@@ -24,7 +24,6 @@ public class Controller implements Serializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("Hello World!");
         File file = (new FileChooser()).showOpenDialog((Window)null);
         if (file != null) {
             Task<Void> sendFileTask = new SendFileTask(file);

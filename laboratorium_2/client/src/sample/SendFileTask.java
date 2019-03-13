@@ -20,6 +20,7 @@ public class SendFileTask extends Task<Void> {
         this.updateProgress(0L, 100L);
 
         try {
+//            Socket socket = new Socket("172.20.16.121", 5001);
             Socket socket = new Socket("localhost", 1500);
             if (!socket.isConnected()) {
                 this.updateMessage("Failed to connect!");
