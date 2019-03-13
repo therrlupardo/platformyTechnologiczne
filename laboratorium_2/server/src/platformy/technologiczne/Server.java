@@ -59,10 +59,15 @@ public class Server {
     }
 
     public static void main(String[] args) {
-
-
-
-        ExecutorService executorService = Executors.newFixedThreadPool(8);
+        System.out.println("Hello");
+        Integer nThreads;
+        if (args.length > 0){
+            nThreads = Integer.parseInt(args[0]);
+        }
+        else{
+            nThreads = 8;
+        }
+        ExecutorService executorService = Executors.newFixedThreadPool(nThreads);
 
         try(ServerSocket serverSocket = new ServerSocket(port)){
             while(true){
