@@ -22,6 +22,12 @@ public class OrderService extends EntityService<Orders> {
         return em.createNamedQuery(Orders.findAll, Orders.class).getResultList();
     }
 
+    /**
+     *
+     * @param order order to be made
+     * @throws OrderEmptyException exception threw, when order is empty
+     * @throws OutOfStockException exception threw, when is stock is out of some element of order
+     */
     @Transactional
     public void placeOrder(Orders order) throws OrderEmptyException, OutOfStockException {
         if(order == null){

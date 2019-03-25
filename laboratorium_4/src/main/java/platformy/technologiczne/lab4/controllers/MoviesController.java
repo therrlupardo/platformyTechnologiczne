@@ -21,11 +21,22 @@ public class MoviesController {
         this.movieService = movieService;
     }
 
+    /**
+     *
+     * @return list of movies in database
+     */
     @GetMapping
     public List<Movies> listMovies(){
         return movieService.findAll();
     }
 
+    /**
+     *
+     * @param movie Movie class object
+     * @param uriComponentsBuilder help with building new utl for movie
+     * @return 201 (created) if everything is ok
+     *         otherwise 409 (conflict)
+     */
     @PostMapping
     public ResponseEntity<Void> addMovie(@RequestBody Movies movie,
                                          UriComponentsBuilder uriComponentsBuilder){
@@ -40,6 +51,12 @@ public class MoviesController {
         }
     }
 
+    /**
+     *
+     * @param id id of movie to return
+     * @return if found return movie with given id
+     *         otherwise 404 not found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Movies> getMovie(@PathVariable UUID id){
         Movies movie = movieService.find(id);
@@ -52,6 +69,12 @@ public class MoviesController {
         }
     }
 
+    /**
+     *
+     * @param movie Movie class object, to replace old one with same id
+     * @return 200 if everything is ok
+     *         404 if movie to be replaced was not found.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateMovie(@RequestBody Movies movie){
         if(movieService.find(movie.getId()) != null){
