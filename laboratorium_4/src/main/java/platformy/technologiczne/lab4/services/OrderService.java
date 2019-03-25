@@ -34,12 +34,12 @@ public class OrderService extends EntityService<Orders> {
         for(Movies movie : order.getMovies()){
             Movies tmp = em.find(Movies.class, movie.getId());
 
-            if(tmp.getAmount() < 1){
+            if(tmp.getAmount() < movie.getAmount()){
                 throw new OutOfStockException();
             }
             else {
                 int new_amount = tmp.getAmount() - movie.getAmount();
-                movie.setAmount(new_amount);
+                tmp.setAmount(new_amount);
             }
 
             save(order);
