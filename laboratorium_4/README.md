@@ -23,7 +23,7 @@ Powinno ładnie śmigać.
   "director": "George Lucas",
   "length": 120,
   "price": 10,
-  "title": "Star Wars: The New Hope"
+  "title": "Star Wars: A New Hope"
 } 
 ```
 * getMovie(), updateMovie() wymagają posiadania id filmu, które można wyciągnąć z listMovies()
