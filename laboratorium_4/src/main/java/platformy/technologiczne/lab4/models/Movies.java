@@ -18,6 +18,7 @@ public class Movies {
     public static final String findAll = "Movies.RETURN_ALL";
 
     @Getter
+    @Setter
     @Id
     private UUID id = UUID.randomUUID();
 

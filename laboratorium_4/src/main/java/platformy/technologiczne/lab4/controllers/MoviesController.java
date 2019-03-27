@@ -76,8 +76,9 @@ public class MoviesController {
      *         404 if movie to be replaced was not found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateMovie(@RequestBody Movies movie){
-        if(movieService.find(movie.getId()) != null){
+    public ResponseEntity<Void> updateMovie(@RequestBody Movies movie, @PathVariable UUID id){
+        if(movieService.find(id) != null){
+            movie.setId(id);
             movieService.save(movie);
             return ResponseEntity.ok().build();
         }
