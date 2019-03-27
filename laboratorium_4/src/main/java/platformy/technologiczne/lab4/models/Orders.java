@@ -27,8 +27,8 @@ public class Orders {
     private UUID id = UUID.randomUUID();
 
     @Getter
-    @ManyToMany(cascade = {MERGE})
-    private List<Movies> movies = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderedMovies> orderedMovies = new ArrayList<>();
 
     @Getter
     @Temporal(TIMESTAMP)

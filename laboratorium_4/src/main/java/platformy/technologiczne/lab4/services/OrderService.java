@@ -3,6 +3,7 @@ package platformy.technologiczne.lab4.services;
 
 import org.springframework.stereotype.Service;
 import platformy.technologiczne.lab4.models.Movies;
+import platformy.technologiczne.lab4.models.OrderedMovies;
 import platformy.technologiczne.lab4.models.Orders;
 import platformy.technologiczne.lab4.services.exceptions.OrderEmptyException;
 import platformy.technologiczne.lab4.services.exceptions.OutOfStockException;
@@ -33,19 +34,19 @@ public class OrderService extends EntityService<Orders> {
         if(order == null){
             throw new OrderEmptyException();
         }
-        else if (order.getMovies().size() == 0){
+        else if (order.getOrderedMovies().size() == 0){
             throw new OrderEmptyException();
         }
 
-        for(Movies movie : order.getMovies()){
-            Movies tmp = em.find(Movies.class, movie.getId());
+        for(OrderedMovies orderedMovies : order.getOrderedMovies()){
+            Movies movie = em.find(Movies.class, orderedMovies.getMovie().getId());
 
-            if(tmp.getAmount() < movie.getAmount()){
+            if(movie.getAmount() < orderedMovies.getAmount()){
                 throw new OutOfStockException();
             }
             else {
-                int new_amount = tmp.getAmount() - movie.getAmount();
-                tmp.setAmount(new_amount);
+                int new_amount = movie.getAmount() - orderedMovies.getAmount();
+                movie.setAmount(new_amount);
             }
 
             save(order);
