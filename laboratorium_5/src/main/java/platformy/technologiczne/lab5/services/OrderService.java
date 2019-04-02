@@ -1,12 +1,12 @@
-package platformy.technologiczne.lab4.services;
+package platformy.technologiczne.lab5.services;
 
 
 import org.springframework.stereotype.Service;
-import platformy.technologiczne.lab4.models.Computers;
-import platformy.technologiczne.lab4.models.OrderedComputers;
-import platformy.technologiczne.lab4.models.Orders;
-import platformy.technologiczne.lab4.services.exceptions.OrderEmptyException;
-import platformy.technologiczne.lab4.services.exceptions.OutOfStockException;
+import platformy.technologiczne.lab5.models.Computers;
+import platformy.technologiczne.lab5.models.OrderedComputers;
+import platformy.technologiczne.lab5.models.Orders;
+import platformy.technologiczne.lab5.services.exceptions.OrderEmptyException;
+import platformy.technologiczne.lab5.services.exceptions.OutOfStockException;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;

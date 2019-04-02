@@ -1,4 +1,4 @@
-package platformy.technologiczne.lab4;
+package platformy.technologiczne.lab5;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,10 +12,10 @@ import springfox.documentation.service.ApiInfo;
 
 @EnableSwagger2
 @SpringBootApplication
-public class Lab4Application {
+public class Lab5Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Lab4Application.class, args);
+		SpringApplication.run(Lab5Application.class, args);
 	}
 
 	private ApiInfo getApiInfo(){

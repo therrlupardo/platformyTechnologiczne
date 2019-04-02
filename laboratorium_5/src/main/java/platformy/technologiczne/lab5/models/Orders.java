@@ -1,4 +1,4 @@
-package platformy.technologiczne.lab4.models;
+package platformy.technologiczne.lab5.models;
 
 
 import lombok.EqualsAndHashCode;
