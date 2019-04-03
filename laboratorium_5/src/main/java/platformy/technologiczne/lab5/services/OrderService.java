@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service;
 import platformy.technologiczne.lab5.models.Computers;
 import platformy.technologiczne.lab5.models.OrderedComputers;
 import platformy.technologiczne.lab5.models.Orders;
-import platformy.technologiczne.lab5.services.exceptions.OrderEmptyException;
-import platformy.technologiczne.lab5.services.exceptions.OutOfStockException;
+import platformy.technologiczne.lab5.services.exceptions.*;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -30,21 +29,36 @@ public class OrderService extends EntityService<Orders> {
      * @throws OutOfStockException exception threw, when is stock is out of some element of order
      */
     @Transactional
-    public void placeOrder(Orders order) throws OrderEmptyException, OutOfStockException {
+    public void placeOrder(Orders order)
+            throws OrderEmptyException,
+                    OutOfStockException,
+                    NotEnoughItemsInOrderException,
+                    NullComputerException,
+                    NotPositiveAmountOfItemsInOrderException {
         if(order == null){
             throw new OrderEmptyException();
         }
         else if (order.getOrderedComputers().size() == 0){
             throw new OrderEmptyException();
+        } else if (order.getOrderedComputers().size() == 1){
+            OrderedComputers orderedComputers = order.getOrderedComputers().get(0);
+            if(orderedComputers.getAmount() < 2) {
+                throw new NotEnoughItemsInOrderException();
+            }
         }
 
         for(OrderedComputers orderedComputers : order.getOrderedComputers()){
+            if(orderedComputers.getComputers() == null) {
+                throw new NullComputerException();
+            }
             Computers computers = em.find(Computers.class, orderedComputers.getComputers().getId());
 
-            if(computers.getAmount() < orderedComputers.getAmount()){
-                throw new OutOfStockException();
+            if(orderedComputers.getAmount() <= 0){
+                throw new NotPositiveAmountOfItemsInOrderException();
             }
-            else {
+            else if(computers.getAmount() < orderedComputers.getAmount()){
+                throw new OutOfStockException();
+            } else {
                 int new_amount = computers.getAmount() - orderedComputers.getAmount();
                 computers.setAmount(new_amount);
             }
