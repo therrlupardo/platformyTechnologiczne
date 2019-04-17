@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace laboratorium_8
+namespace lab8
 {
     /// <summary>
     /// Logika interakcji dla klasy App.xaml

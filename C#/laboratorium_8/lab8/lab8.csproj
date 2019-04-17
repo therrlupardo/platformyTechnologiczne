@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8D451053-0378-4853-9D2C-769CB5690D97}</ProjectGuid>
+    <ProjectGuid>{D7F62983-CEE1-45C1-AAEA-DEE34941B64E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>laboratorium_8</RootNamespace>
-    <AssemblyName>laboratorium_8</AssemblyName>
+    <RootNamespace>lab8</RootNamespace>
+    <AssemblyName>lab8</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
