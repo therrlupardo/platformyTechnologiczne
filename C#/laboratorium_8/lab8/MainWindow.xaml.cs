@@ -104,7 +104,7 @@ namespace lab8
         private void MenuItemDeleteClick(object sender, RoutedEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)treeView.SelectedItem;
-            String path = (String)item.Tag;
+            string path = (string)item.Tag;
             FileAttributes attributes = File.GetAttributes(path);
             File.SetAttributes(path, attributes & ~FileAttributes.ReadOnly);
             if((attributes & FileAttributes.Directory) == FileAttributes.Directory)
@@ -142,7 +142,9 @@ namespace lab8
 
         private void MenuItemOpenClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            TreeViewItem item = (TreeViewItem)treeView.SelectedItem;
+            string content = File.ReadAllText((string)item.Tag);
+            scrollViewer.Content = new TextBlock() { Text = content };           
         }
     }
 }
