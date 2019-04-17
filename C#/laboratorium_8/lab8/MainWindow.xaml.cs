@@ -38,26 +38,22 @@ namespace lab8
             {
                 treeView.Items.Clear();
                 var parts = dlg.SelectedPath.Split('\\');
-                var root = new TreeViewItem
+                TreeViewItem root = new TreeViewItem();
+                if (Directory.Exists(dlg.SelectedPath))
                 {
-                    Header = parts[parts.Length-1],
-                    Tag = dlg.SelectedPath
-                };
-
-                DirectoryInfo dir = new DirectoryInfo(dlg.SelectedPath);
-                foreach(DirectoryInfo subdir in dir.GetDirectories())
-                {
-                    root.Items.Add(this.MakeTreeDirectory(subdir));
+                    DirectoryInfo dir = new DirectoryInfo(dlg.SelectedPath);
+                    root = MakeTreeDirectory(dir);
                 }
-                foreach(FileInfo file in dir.GetFiles())
+                else if (File.Exists(dlg.SelectedPath))
                 {
-                    root.Items.Add(this.MakeTreeFile(file));
+                    FileInfo file = new FileInfo(dlg.SelectedPath);
+                    root = MakeTreeFile(file);
                 }
                 treeView.Items.Add(root);
             }
         }
 
-        private object MakeTreeFile(FileInfo file)
+        private TreeViewItem MakeTreeFile(FileInfo file)
         {
             var item = new TreeViewItem
             {
@@ -67,7 +63,7 @@ namespace lab8
             return item;
         }
 
-        private object MakeTreeDirectory(DirectoryInfo dir)
+        private TreeViewItem MakeTreeDirectory(DirectoryInfo dir)
         {
             var root = new TreeViewItem
             {
