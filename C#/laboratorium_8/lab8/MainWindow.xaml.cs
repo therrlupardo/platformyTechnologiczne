@@ -64,6 +64,7 @@ namespace lab8
             menuItem2.Click += new RoutedEventHandler(MenuItemDeleteClick);
             item.ContextMenu.Items.Add(menuItem1);
             item.ContextMenu.Items.Add(menuItem2);
+            item.Selected += new RoutedEventHandler(StatusBarUpdate);
             return item;
         }
 
@@ -93,6 +94,7 @@ namespace lab8
             {
                 root.Items.Add(MakeTreeFile(file));
             }
+            root.Selected += new RoutedEventHandler(StatusBarUpdate);
             return root;
         }
 
@@ -161,6 +163,45 @@ namespace lab8
             TreeViewItem item = (TreeViewItem)treeView.SelectedItem;
             string content = File.ReadAllText((string)item.Tag);
             scrollViewer.Content = new TextBlock() { Text = content };           
+        }
+
+        private void StatusBarUpdate(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)treeView.SelectedItem;
+            FileAttributes attributes = File.GetAttributes((string)item.Tag);
+            statusDOS.Text = "";
+            if((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+            {
+                statusDOS.Text += 'r';
+            }
+            else
+            {
+                statusDOS.Text += '-';
+            }
+            if ((attributes & FileAttributes.Archive) == FileAttributes.Archive)
+            {
+                statusDOS.Text += 'a';
+            }
+            else
+            {
+                statusDOS.Text += '-';
+            }
+            if ((attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+            {
+                statusDOS.Text += 'h';
+            }
+            else
+            {
+                statusDOS.Text += '-';
+            }
+            if ((attributes & FileAttributes.System) == FileAttributes.System)
+            {
+                statusDOS.Text += 's';
+            }
+            else
+            {
+                statusDOS.Text += '-';
+            }
         }
     }
 }

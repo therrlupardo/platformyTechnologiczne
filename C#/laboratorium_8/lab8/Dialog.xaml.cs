@@ -39,6 +39,10 @@ namespace lab8
             {
                 System.Windows.MessageBox.Show("Wrong name!", "Alert", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            else if(!isFile && !isDirectory)
+            {
+                System.Windows.MessageBox.Show("Specify what do you want to be created!", "Alert", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
             else
             {
                 name = dialogName.Text;
