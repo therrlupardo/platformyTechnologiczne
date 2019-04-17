@@ -98,7 +98,23 @@ namespace lab8
 
         private void MenuItemCreateClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            TreeViewItem folder = (TreeViewItem)treeView.SelectedItem;
+            string path = (string)folder.Tag;
+            Dialog dialog = new Dialog(path);
+            dialog.ShowDialog();
+            if (dialog.Succeeded())
+            {
+                if (File.Exists(dialog.GetPath()))
+                {
+                    FileInfo file = new FileInfo(dialog.GetPath());
+                    folder.Items.Add(MakeTreeFile(file));
+                }
+                else if (Directory.Exists(dialog.GetPath()))
+                {
+                    DirectoryInfo dir = new DirectoryInfo(dialog.GetPath());
+                    folder.Items.Add(MakeTreeDirectory(dir));
+                }
+            }
         }
 
         private void MenuItemDeleteClick(object sender, RoutedEventArgs e)
