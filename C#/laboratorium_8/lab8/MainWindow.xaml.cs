@@ -38,17 +38,8 @@ namespace lab8
             {
                 treeView.Items.Clear();
                 var parts = dlg.SelectedPath.Split('\\');
-                TreeViewItem root = new TreeViewItem();
-                if (Directory.Exists(dlg.SelectedPath))
-                {
-                    DirectoryInfo dir = new DirectoryInfo(dlg.SelectedPath);
-                    root = MakeTreeDirectory(dir);
-                }
-                else if (File.Exists(dlg.SelectedPath))
-                {
-                    FileInfo file = new FileInfo(dlg.SelectedPath);
-                    root = MakeTreeFile(file);
-                }
+                DirectoryInfo dir = new DirectoryInfo(dlg.SelectedPath);
+                var root = MakeTreeDirectory(dir);
                 treeView.Items.Add(root);
             }
         }
