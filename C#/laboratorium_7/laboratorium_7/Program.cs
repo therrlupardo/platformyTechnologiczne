@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; 
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
@@ -11,15 +11,18 @@ namespace laboratorium_7
         static void Main(string[] args)
         {
             string path = args[0];
-            PrintFiles(path);
-            Console.WriteLine("Oldest file: {0}", (new DirectoryInfo(path)).GetOldestFile());
-            CreateCollection(path);
+            if (PrintFiles(path))
+            {
+                Console.WriteLine();
+                Console.WriteLine("Oldest file: {0}", (new DirectoryInfo(path)).GetOldestFile());
+                CreateCollection(path);
+            }
         }
 
-        public static void PrintFiles(string path)
+        public static bool PrintFiles(string path)
         {
             Console.WriteLine(path);
-            if (File.Exists(path))
+            if (File.Exists(path))  
             {
                 ProcessFile(path, 0);
             }
@@ -32,19 +35,21 @@ namespace laboratorium_7
             else
             {
                 Console.WriteLine("Invalid directory");
+                return false;
             }
+            return true;
         }
 
         public static void ProcessDirectory(string path, int depth)
         {
             string[] files = Directory.GetFiles(path);
-            foreach (string file in files)
+            foreach (var file in files)
             {
                 ProcessFile(file, depth);
             }
 
             string[] directories = Directory.GetDirectories(path);
-            foreach (string directory in directories)
+            foreach (var directory in directories)
             {
                 string[] pathParts = directory.Split("\\");
                 string directoryName = pathParts[pathParts.Length - 1];
@@ -77,8 +82,8 @@ namespace laboratorium_7
         public static DateTime GetOldestFile(this DirectoryInfo directory)
         {
             DateTime oldest = new DateTime(2200, 12, 31);
-
-            foreach (DirectoryInfo directoryInfo in directory.GetDirectories())
+            
+            foreach (var directoryInfo in directory.GetDirectories())
             {
                 DateTime dirOldest = directoryInfo.GetOldestFile();
                 if (dirOldest < oldest)
@@ -86,7 +91,7 @@ namespace laboratorium_7
                     oldest = dirOldest;
                 }
             }
-            foreach (FileInfo fileInfo in directory.GetFiles())
+            foreach (var fileInfo in directory.GetFiles())
             {
                 DateTime creationDate = fileInfo.CreationTime;
                 if (creationDate < oldest)
@@ -190,31 +195,13 @@ namespace laboratorium_7
                 Console.WriteLine("Serialization error: {0}", e.Message);
             }
 
-            foreach(KeyValuePair<string, int> file in collection)
+            foreach(var file in collection)
             {
                 Console.WriteLine("{0} -> {1}", file.Key, file.Value);
             }
         }
     }   
 
-    [Serializable]
-    public class StringComparer : IComparer<string>
-    {
-        public int Compare(string a, string b)
-        {
-            if (a.Length > b.Length)
-            {
-                return 1;
-            }
-            else if (a.Length < b.Length)
-            {
-                return 0;
-            }
-            else
-            {
-                return a.CompareTo(b);
-            }
-        }
-    }
+    
 
 }
