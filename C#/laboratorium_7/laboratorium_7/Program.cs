@@ -12,7 +12,7 @@ namespace laboratorium_7
         {
             string path = args[0];
             PrintFiles(path);
-            Console.WriteLine("Najstarszy plik: {0}", (new DirectoryInfo(path)).GetOldestFile());
+            Console.WriteLine("Oldest file: {0}", (new DirectoryInfo(path)).GetOldestFile());
             CreateCollection(path);
         }
 
@@ -170,7 +170,7 @@ namespace laboratorium_7
             }
             catch (SerializationException e)
             {
-                Console.WriteLine("Błąd serializacji {0}", e.Message);
+                Console.WriteLine("Serialization error: {0}", e.Message);
             }
             fs.Close();
             Deserialize();
@@ -187,7 +187,7 @@ namespace laboratorium_7
             }
             catch (SerializationException e)
             {
-                Console.WriteLine("Błąd serializacji {0}", e.Message);
+                Console.WriteLine("Serialization error: {0}", e.Message);
             }
 
             foreach(KeyValuePair<string, int> file in collection)
