@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace laboratorium_9
 {
@@ -22,14 +24,35 @@ namespace laboratorium_9
         static void Main()
         {
             Exercise1();
+            Exercise2();
         }
 
-        public static void Exercise1()
+        private static void Exercise2()
+        {
+            var fileName = "cars.xml";
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(currentDirectory, fileName);
+
+            using (StreamWriter sw = new StreamWriter(filePath))
+            {
+                XElement xml = new XElement("cars", myCars
+                .Select(n => new XElement("car",
+                new XElement("model", n.model),
+                new XElement("engine",
+                    new XAttribute("model", n.motor.model),
+                    new XElement("displacement", n.motor.displacement),
+                    new XElement("horsePower", n.motor.horsePower)),
+                new XElement("year", n.year))));
+                sw.Write(xml.ToString());
+            }
+
+        }
+
+        private static void Exercise1()
         {
             Console.WriteLine("Zadanie 1a - Projekcja myCar na typ anonimowy:");
             var myCarToAnonymousTypeQuery = myCars
-                                                .Where(s => s.model
-                                                .Equals("A6"))
+                                                .Where(s => s.model.Equals("A6"))
                                                 .Select(car =>
                                                     new
                                                     {
