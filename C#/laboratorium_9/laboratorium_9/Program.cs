@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace laboratorium_9
 {
@@ -23,34 +24,32 @@ namespace laboratorium_9
 
         static void Main()
         {
-            Exercise1();
-            Exercise2();
+            LinqStatements();
+            SerializeAndDeserialize();
+            XPathStatements();
+            LinqSerialization();
+            MyCarsToXHTMLTable();
         }
 
-        private static void Exercise2()
+       
+
+        private static void LinqSerialization()
         {
-            var fileName = "cars.xml";
-            var currentDirectory = Directory.GetCurrentDirectory();
-            var filePath = Path.Combine(currentDirectory, fileName);
-
-            using (StreamWriter sw = new StreamWriter(filePath))
-            {
-                XElement xml = new XElement("cars", myCars
-                .Select(n => new XElement("car",
-                new XElement("model", n.model),
-                new XElement("engine",
-                    new XAttribute("model", n.motor.model),
-                    new XElement("displacement", n.motor.displacement),
-                    new XElement("horsePower", n.motor.horsePower)),
-                new XElement("year", n.year))));
-                sw.Write(xml.ToString());
-            }
-
+            IEnumerable<XElement> nodes = myCars
+                .Select(n => 
+                new XElement("car",
+                    new XElement("model", n.model),
+                    new XElement("engine",
+                        new XAttribute("model", n.motor.model),
+                        new XElement("displacement", n.motor.displacement),
+                        new XElement("horsePower", n.motor.horsePower)),
+                    new XElement("year", n.year)));
+            XElement rootNode = new XElement("cars", nodes);
+            rootNode.Save("CarsCollectionLinq.xml");
         }
 
-        private static void Exercise1()
+        private static void LinqStatements()
         {
-            Console.WriteLine("Zadanie 1a - Projekcja myCar na typ anonimowy:");
             var myCarToAnonymousTypeQuery = myCars
                                                 .Where(s => s.model.Equals("A6"))
                                                 .Select(car =>
@@ -66,7 +65,6 @@ namespace laboratorium_9
                 Console.WriteLine(elem.ToString());
             }
             Console.WriteLine();
-            Console.WriteLine("Zadanie 1b - grupowanie wartości hppl po typie silnika");
             var groupedQuery = myCarToAnonymousTypeQuery
                 .GroupBy(elem => elem.engineType)
                 .Select(elem => $"{elem.First().engineType}: {elem.Average(s => s.hppl).ToString()}");
@@ -76,6 +74,78 @@ namespace laboratorium_9
             }
             Console.WriteLine();
         }
+        private static void MyCarsToXHTMLTable()
+        {
+            //var rows = myCars.Select(n =>
+            //    new string( "<tr>" +
+            //                $"<td> {n.model} </td>" +
+            //                $"<td> {n.motor.model} </td>" +
+            //                $"<td> {n.motor.displacement} </td>" +
+            //                $"<td> {n.motor.horsePower} </td>" +
+            //                $"<td> {n.year} </td>" +
+            //                "</tr>"));
+            //string table = "<table>";
+            //foreach(var row in rows)
+            //{
+            //    table = String.Concat(table, row);
+            //}
+            //table = String.Concat(table, "</table>");
+            //Console.WriteLine(table);
+
+            IEnumerable<XElement> rows = myCars
+                .Select(car =>
+                new XElement("tr", new XAttribute("style", "border: 2px solid black"),
+                    new XElement("td", new XAttribute("style", "border: 2px double black"), car.model),
+                    new XElement("td", new XAttribute("style", "border: 2px double black"), car.motor.model),
+                    new XElement("td", new XAttribute("style", "border: 2px double black"), car.motor.displacement),
+                    new XElement("td", new XAttribute("style", "border: 2px double black"), car.motor.horsePower),
+                    new XElement("td", new XAttribute("style", "border: 2px double black"), car.year)));
+            XElement table = new XElement("table", new XAttribute("style", "border: 2px double black"), rows);
+            XElement template = XElement.Load("template.html");
+            XElement body = template.Element("{http://www.w3.org/1999/xhtml}body");
+            body.Add(table);
+            template.Save("templateWithTable.html");
+
+
+        }
+
+        private static void SerializeAndDeserialize()
+        {
+            var fileName = "CarsCollection.xml";
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(currentDirectory, fileName);
+            Serializator.SerializeCollection(myCars, filePath);
+            var deserializedList = Serializator.DeserializeXML(filePath);
+            Console.Write("Models of cars from deserialized list: ");
+            foreach(var elem in deserializedList)
+            {
+                Console.Write($"{elem.model} ");
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
+        private static void XPathStatements()
+        {
+            XElement rootNode = XElement.Load("CarsCollection.xml");
+            var countAvarageXPath = "sum(//car/engine[@model!=\"TDI\"]/horsePower) div count(//car/engine[@model!=\"TDI\"]/horsePower)";
+            Console.WriteLine($"Średnia: {(double)rootNode.XPathEvaluate(countAvarageXPath)}");
+
+            var removeDuplicatesXPath = "//car[following-sibling::car/model = model]";
+            IEnumerable<XElement> models = rootNode.XPathSelectElements(removeDuplicatesXPath);
+
+            var fileName = "CarsCollectionNoRepeats.xml";
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(currentDirectory, fileName);
+            using (var writer = new StreamWriter(filePath))
+            {
+                foreach(var model in models)
+                {
+                    writer.WriteLine(model);   
+                }
+            }
+        }
+
 
 
     }
