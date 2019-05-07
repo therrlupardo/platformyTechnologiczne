@@ -29,14 +29,13 @@ namespace laboratorium_9
             XPathStatements();
             LinqSerialization();
             MyCarsToXHTMLTable();
+            ModifyCarsCollectionXML();
         }
-
-       
 
         private static void LinqSerialization()
         {
             IEnumerable<XElement> nodes = myCars
-                .Select(n => 
+                .Select(n =>
                 new XElement("car",
                     new XElement("model", n.model),
                     new XElement("engine",
@@ -74,24 +73,38 @@ namespace laboratorium_9
             }
             Console.WriteLine();
         }
+
+        private static void ModifyCarsCollectionXML()
+        {
+            XElement template = XElement.Load("CarsCollection.xml");
+            foreach(var car in template.Elements())
+            {
+                foreach(var field in car.Elements())
+                {
+                    if(field.Name == "engine")
+                    {
+                        foreach(var engineElement in field.Elements())
+                        {
+                            if(engineElement.Name == "horsePower")
+                            {
+                                engineElement.Name = "hp";
+                            }
+                        }
+                    }
+                    else if (field.Name == "model")
+                    {
+                        var yearField = car.Element("year");
+                        XAttribute attribute = new XAttribute("year", yearField.Value);
+                        field.Add(attribute);
+                        yearField.Remove();
+                    }
+                }
+            }
+            template.Save("CarsCollectionModified.xml");
+        }
+
         private static void MyCarsToXHTMLTable()
         {
-            //var rows = myCars.Select(n =>
-            //    new string( "<tr>" +
-            //                $"<td> {n.model} </td>" +
-            //                $"<td> {n.motor.model} </td>" +
-            //                $"<td> {n.motor.displacement} </td>" +
-            //                $"<td> {n.motor.horsePower} </td>" +
-            //                $"<td> {n.year} </td>" +
-            //                "</tr>"));
-            //string table = "<table>";
-            //foreach(var row in rows)
-            //{
-            //    table = String.Concat(table, row);
-            //}
-            //table = String.Concat(table, "</table>");
-            //Console.WriteLine(table);
-
             IEnumerable<XElement> rows = myCars
                 .Select(car =>
                 new XElement("tr", new XAttribute("style", "border: 2px solid black"),
@@ -105,8 +118,6 @@ namespace laboratorium_9
             XElement body = template.Element("{http://www.w3.org/1999/xhtml}body");
             body.Add(table);
             template.Save("templateWithTable.html");
-
-
         }
 
         private static void SerializeAndDeserialize()
