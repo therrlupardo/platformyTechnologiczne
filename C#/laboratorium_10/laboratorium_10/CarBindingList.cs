@@ -18,10 +18,14 @@ namespace laboratorium_10
 
         public CarBindingList(List<Car> list)
         {
-            foreach (var car in list)
+            if(list != null)
             {
-                base.Add(car);
+                foreach (var car in list)
+                {
+                    Add(car);
+                }
             }
+            
         }
 
         protected override bool SupportsSearchingCore
