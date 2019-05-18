@@ -102,9 +102,17 @@ namespace laboratorium_10
             }
         }
 
-        protected override int FindCore(PropertyDescriptor prop, object key)
+        private int FindCore(PropertyDescriptor prop, object key, bool isEngine)
         {
-            PropertyInfo propInfo = typeof(Car).GetProperty(prop.Name);
+            PropertyInfo propInfo;
+            if (isEngine)
+            {
+                propInfo = typeof(Engine).GetProperty(prop.Name);
+            }
+            else
+            {
+                propInfo = typeof(Car).GetProperty(prop.Name);
+            }
             selectedIndices = new ArrayList();
             int found = -1;
 
@@ -112,10 +120,21 @@ namespace laboratorium_10
             {
                 for (int i = 0; i < Count; i++)
                 {
-                    if (propInfo.GetValue(Items[i], null).Equals(key))
+                    if (isEngine)
                     {
-                        found++;
-                        selectedIndices.Add(i);
+                        if (propInfo.GetValue(Items[i].motor, null).Equals(key))
+                        {
+                            found++;
+                            selectedIndices.Add(i);
+                        }
+                    }
+                    else
+                    {
+                        if (propInfo.GetValue(Items[i], null).Equals(key))
+                        {
+                            found++;
+                            selectedIndices.Add(i);
+                        }
                     }
                 }
             }
@@ -124,11 +143,21 @@ namespace laboratorium_10
 
         public int[] FindIndices(string property, object key)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(Car));
+            PropertyDescriptorCollection properties;
+            bool isEngine = property.Contains("motor");
+            if (isEngine)
+            {
+                properties = TypeDescriptor.GetProperties(typeof(Engine));
+                property = property.Split('.')[1];
+            }
+            else
+            {
+                properties = TypeDescriptor.GetProperties(typeof(Car));
+            }
             PropertyDescriptor prop = properties.Find(property, true);
             if (prop != null)
             {
-                if (FindCore(prop, key) >= 0)
+                if (FindCore(prop, key, isEngine) >= 0)
                 {
                     return (int[])(selectedIndices.ToArray(typeof(int)));
                 }
@@ -139,22 +168,17 @@ namespace laboratorium_10
 
         public List<Car> FindCars(string property, object key)
         {
-
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(Car));
-            PropertyDescriptor prop = properties.Find(property, true);
-            if (prop != null)
+            List<Car> listOfMatchingCars = new List<Car>();
+            int[] indices = FindIndices(property, key);
+            if (indices != null)
             {
-                if (FindCore(prop, key) >= 0)
+                foreach (var index in FindIndices(property, key))
                 {
-                    List<Car> listOfMatchingCars = new List<Car>();
-                    foreach (var index in selectedIndices)
-                    {
-                        listOfMatchingCars.Add(Items[(int)index]);
-                    }
-                    return listOfMatchingCars;
+                    listOfMatchingCars.Add(Items[index]);
                 }
+                return listOfMatchingCars;
             }
-            return null;
+            else return null;
         }
 
     }

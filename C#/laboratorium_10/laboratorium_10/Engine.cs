@@ -9,13 +9,13 @@ namespace laboratorium_10
     {
         public double displacement { get; set; }
 
-        public double horsePower { get; set; }
+        public int horsePower { get; set; }
 
         public string model { get; set; }
 
 
         public Engine() { }
-        public Engine(double displacement, double horsePower, string model)
+        public Engine(double displacement, int horsePower, string model)
         {
             this.displacement = displacement;
             this.horsePower = horsePower;

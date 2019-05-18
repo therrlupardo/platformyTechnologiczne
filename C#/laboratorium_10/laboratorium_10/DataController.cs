@@ -93,9 +93,9 @@ namespace laboratorium_10
 
         private static void PerformBindingListSearching(CarBindingList myCarsBindingList)
         {
-            var searchResult = myCarsBindingList.FindCars("year", 2012);
+            var searchResult = myCarsBindingList.FindCars("motor.displacement", 3.0);
             OutputWriter.WriteEmptyLine();
-            OutputWriter.Write("Searching year 2012 in myCars using BindingList:");
+            OutputWriter.Write("Searching motor.displacement = 3.0 in myCars using BindingList:");
             if (searchResult != null)
             {
                 OutputWriter.Write(searchResult);
