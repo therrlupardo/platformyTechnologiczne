@@ -134,11 +134,24 @@ namespace laboratorium_10
                 {
                     if (isEngine)
                     {
-                        if (propInfo.GetValue(Items[i].motor, null).Equals(key))
+                        double neverused;
+                        if(Double.TryParse(key.ToString(), out neverused))
                         {
-                            found++;
-                            selectedIndices.Add(i);
+                            if (propInfo.GetValue(Items[i].motor, null).Equals(Double.Parse(key.ToString())))
+                            {
+                                found++;
+                                selectedIndices.Add(i);
+                            }
                         }
+                        else
+                        {
+                            if (propInfo.GetValue(Items[i].motor, null).Equals(key))
+                            {
+                                found++;
+                                selectedIndices.Add(i);
+                            }
+                        }
+                        
                     }
                     else
                     {

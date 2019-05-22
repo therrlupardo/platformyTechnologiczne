@@ -57,10 +57,11 @@ namespace laboratorium_10
 
         private void ButtonSearch(object sender, RoutedEventArgs e)
         {
+            CheckForNewItems();
             myCarsBindingList = new CarBindingList(DataController.myCars);
             List<Car> resultListOfCars;
             Int32 tmp;
-            if (searchTextBox.Text != "")
+            if (!searchTextBox.Text.Equals(""))
             {
                 //OutputWriter.Write(comboBox.SelectedItem.ToString());
                 string property = comboBox.SelectedItem.ToString();
@@ -77,6 +78,18 @@ namespace laboratorium_10
                 UpdateDataGrid();
             }
         }
+
+        private void CheckForNewItems()
+        {
+            foreach(Car item in myCarsBindingList)
+            {
+                if (!DataController.myCars.Contains(item))
+                {
+                    DataController.myCars.Add(item);
+                }
+            }
+        }
+
         private void ButtonReload(object sender, RoutedEventArgs e)
         {
             myCarsBindingList = new CarBindingList(DataController.myCars);
@@ -117,8 +130,10 @@ namespace laboratorium_10
 
         private void UpdateDataGrid()
         {
+
             carBindingSource.DataSource = myCarsBindingList;
             dataGridView1.ItemsSource = carBindingSource;
+            
         }
 
         private void InitComboBox()
@@ -133,6 +148,5 @@ namespace laboratorium_10
             comboBox.SelectedIndex = 0;
         }
 
-       
     }
 }

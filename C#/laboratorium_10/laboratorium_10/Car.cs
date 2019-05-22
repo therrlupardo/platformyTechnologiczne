@@ -12,7 +12,10 @@ namespace laboratorium_10
 
         public Engine motor { get;  set; }
 
-        public Car() { }
+        public Car()
+        {
+            motor = new Engine();
+        }
 
         public Car(string model, Engine motor, int year)
         {

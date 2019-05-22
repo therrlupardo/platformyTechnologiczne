@@ -28,7 +28,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate >
                         <DataTemplate>
-                            <StackPanel>
+                            <StackPanel >
                                 <TextBox Text="{Binding Path=motor.model}"/>
                                 <TextBox Text="{Binding Path=motor.displacement}"/>
                                 <TextBox Text="{Binding Path=motor.horsePower}"/>

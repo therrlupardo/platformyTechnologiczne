@@ -10,7 +10,7 @@ namespace laboratorium_10
     class DataController
     {
         private delegate int CompareCarsPowerDelegate(Car car1, Car car2);
-        public static readonly List<Car> myCars = new List<Car>(){
+        public static List<Car> myCars = new List<Car>(){
                 new Car("E250", new Engine(1.8, 204, "CGI"), 2009),
                 new Car("E350", new Engine(3.5, 292, "CGI"), 2009),
                 new Car("A6", new Engine(2.5, 187, "FSI"), 2012),
@@ -21,7 +21,7 @@ namespace laboratorium_10
                 new Car("S6", new Engine(4.0, 414, "TFSI"), 2012),
                 new Car("S8", new Engine(4.0, 513, "TFSI"), 2012)
         };
-
+        
         public static void LinqStatements()
         {
             var methodBasedSyntaxQuery = myCars
@@ -35,7 +35,13 @@ namespace laboratorium_10
                         hppl = car.motor.horsePower / car.motor.displacement,
                     })
                     .GroupBy(elem => elem.engineType)
-                    .Select(elem => $"{elem.First().engineType.ToString()} = {elem.Average(s => s.hppl).ToString()}");
+                    .Select(elem => new
+                    {
+                        name = elem.First().engineType.ToString(),
+                        value = elem.Average(s => s.hppl).ToString()
+                    })
+                    .OrderByDescending(t => t.value)
+                    .Select(elem => $"{elem.name} = {elem.value}");
 
             var queryExpresionSyntax = from elem
                                        in (from car in myCars
@@ -48,7 +54,14 @@ namespace laboratorium_10
                                                hppl = car.motor.horsePower / car.motor.displacement,
                                            })
                                        group elem by elem.engineType into elemGrouped
-                                       select $"{elemGrouped.First().engineType.ToString()} = {elemGrouped.Average(s => s.hppl).ToString()}";
+                                       select new
+                                       {
+                                           name = elemGrouped.First().engineType.ToString(),
+                                           value = elemGrouped.Average(s => s.hppl).ToString()
+                                       } into elemSelected
+                                       orderby elemSelected.value descending
+                                       select $"{elemSelected.name} = {elemSelected.value}";
+
 
             OutputWriter.Write("Query Expression Syntax:");
             OutputWriter.Write(queryExpresionSyntax);
@@ -62,7 +75,7 @@ namespace laboratorium_10
         public static void PerformOperations()
         {
             List<Car> myCarsCopy = new List<Car>(myCars);
-            CompareCarsPowerDelegate arg1 = CompareCarsPower;
+            CompareCarsPowerDelegate arg1 = CompareCarsPowers;
             Predicate<Car> arg2 = IsTDI;
             Action<Car> arg3 = ShowMessageBox;
 
@@ -93,9 +106,9 @@ namespace laboratorium_10
 
         private static void PerformBindingListSearching(CarBindingList myCarsBindingList)
         {
-            var searchResult = myCarsBindingList.FindCars("motor.displacement", 3.0);
+            var searchResult = myCarsBindingList.FindCars("motor.displacement", 1.8);
             OutputWriter.WriteEmptyLine();
-            OutputWriter.Write("Searching motor.displacement = 3.0 in myCars using BindingList:");
+            OutputWriter.Write("Searching motor.displacement = 1.8 in myCars using BindingList:");
             if (searchResult != null)
             {
                 OutputWriter.Write(searchResult);
@@ -112,7 +125,7 @@ namespace laboratorium_10
             else OutputWriter.Write("null");
         }
 
-        private static int CompareCarsPower(Car car1, Car car2)
+        private static int CompareCarsPowers(Car car1, Car car2)
         {
             if (car1.motor.horsePower >= car2.motor.horsePower)
             {
