@@ -9,7 +9,7 @@
     <Grid>
         <DataGrid Name="dataGridView1" HorizontalAlignment="Left" Height="354" Margin="10,35,0,0"
                   VerticalAlignment="Top" Width="772" CanUserResizeColumns="False" 
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" CanUserSortColumns="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
@@ -21,9 +21,13 @@
 
                 <DataGridTextColumn Header="Model" Binding="{Binding model}"/>
                 <DataGridTextColumn Header="Motor" Binding="{Binding motor}"/>
-                <DataGridTextColumn Header="Year" Binding="{Binding year}"/>
+                <DataGridTextColumn Header="Year" Binding="{Binding year}" />
             </DataGrid.Columns>
-
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <EventSetter Event="Click" Handler="SortColumn"/>
+                </Style>
+            </DataGrid.Resources>
         </DataGrid>
         <ToolBar HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="782">
             <Label Height="25" Margin="0" VerticalAlignment="Top" Width="80" Content="Search for:"/>

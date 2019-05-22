@@ -18,14 +18,14 @@ namespace laboratorium_10
 
         public CarBindingList(List<Car> list)
         {
-            if(list != null)
+            if (list != null)
             {
                 foreach (var car in list)
                 {
                     Add(car);
                 }
             }
-            
+
         }
 
         protected override bool SupportsSearchingCore
@@ -48,8 +48,6 @@ namespace laboratorium_10
         {
             get { return isSortedValue; }
         }
-
-        protected override ListSortDirection SortDirectionCore { get { return sortDirectionValue; } }
 
 
         protected override void ApplySortCore(PropertyDescriptor prop, ListSortDirection direction)
@@ -78,17 +76,27 @@ namespace laboratorium_10
                 for (int i = 0; i < sortedList.Count; i++)
                 {
                     var foundIndices = FindIndices(prop.Name, sortedList[i]);
-                    foreach (var index in foundIndices)
+                    if (foundIndices != null)
                     {
-                        unsortedList.Add(Items[index]);
+                        foreach (var index in foundIndices)
+                        {
+                            unsortedList.Add(Items[index]);
+                        }
                     }
                 }
-                isSortedValue = true;
-                OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
-            }
-            else
-            {
-                throw new NotSupportedException($"Cannot sort by {prop.Name}. Lack of IComperable implementation.");
+
+                if(unsortedList != null)
+                {
+                    Clear();
+                    foreach (Car elem in unsortedList)
+                    {
+                        Add(elem);
+                    }
+                    isSortedValue = true;
+                    OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
+                }
+               
+                
             }
         }
 
@@ -148,11 +156,12 @@ namespace laboratorium_10
         public int[] FindIndices(string property, object key)
         {
             PropertyDescriptorCollection properties;
-            bool isEngine = property.Contains("motor");
+            bool isEngine = property.Contains("motor.");
             if (isEngine)
             {
+
                 properties = TypeDescriptor.GetProperties(typeof(Engine));
-                property = property.Split('.')[1];
+                property = property.Split('.').Last();
             }
             else
             {
@@ -185,8 +194,8 @@ namespace laboratorium_10
             else return null;
         }
 
-    }
 
+    }
 
 }
 

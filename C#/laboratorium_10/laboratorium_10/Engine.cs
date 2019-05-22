@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace laboratorium_10
 {
-    public class Engine
+    public class Engine : IComparable
     {
         public double displacement { get; set; }
 
@@ -27,6 +27,18 @@ namespace laboratorium_10
             return $"{model} {displacement} ({horsePower} hp)"; 
         }
 
-
+        public int CompareTo(object obj)
+        {
+            Engine other = (Engine)obj;
+            if (model.CompareTo(other.model) != 0)
+            {
+                return model.CompareTo(other.model);
+            }
+            else if (displacement.CompareTo(other.displacement) != 0)
+            {
+                return displacement.CompareTo(other.displacement);
+            }
+            return horsePower.CompareTo(other.horsePower);
+        }
     }
 }

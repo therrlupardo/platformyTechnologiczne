@@ -26,6 +26,7 @@ namespace laboratorium_10
     {
         private CarBindingList myCarsBindingList;
         private BindingSource carBindingSource;
+        private Dictionary<string, bool> sortingASC = new Dictionary<string, bool>();
 
         public MainWindow()
         {
@@ -37,10 +38,20 @@ namespace laboratorium_10
 
             InitializeComponent();
             InitComboBox();
+            InitSorting();
             myCarsBindingList = new CarBindingList(DataController.myCars);
             carBindingSource = new BindingSource();
             UpdateDataGrid();
 
+
+        }
+
+        private void InitSorting()
+        {
+            sortingASC.Clear();
+            sortingASC.Add("model", false);
+            sortingASC.Add("motor", false);
+            sortingASC.Add("year", false);
 
         }
 
@@ -51,7 +62,7 @@ namespace laboratorium_10
             Int32 tmp;
             if (searchTextBox.Text != "")
             {
-                OutputWriter.Write(comboBox.SelectedItem.ToString());
+                //OutputWriter.Write(comboBox.SelectedItem.ToString());
                 string property = comboBox.SelectedItem.ToString();
                 if (Int32.TryParse(searchTextBox.Text, out tmp))
                 {
@@ -74,7 +85,20 @@ namespace laboratorium_10
         private void SortColumn(object sender, RoutedEventArgs e)
         {
             var columnHeader = sender as DataGridColumnHeader;
-            OutputWriter.Write(columnHeader.ToString());
+            string columnName = columnHeader.ToString().Split(' ')[1].ToLower();
+            bool isAsc = sortingASC[columnName];
+            InitSorting();
+            if (isAsc == true)
+            {
+                myCarsBindingList.Sort(columnName, ListSortDirection.Descending);
+            }
+            else
+            {
+                myCarsBindingList.Sort(columnName, ListSortDirection.Ascending);
+            }
+            sortingASC[columnName] = !isAsc;
+            OutputWriter.Write(myCarsBindingList);
+            UpdateDataGrid();
         }
         private void ButtonDeleteRow(object sender, RoutedEventArgs e)
         {
@@ -108,5 +132,7 @@ namespace laboratorium_10
             comboBox.SelectedIndex = 0;
         }
         
+        
+
     }
 }

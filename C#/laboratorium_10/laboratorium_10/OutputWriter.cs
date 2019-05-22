@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,7 +30,13 @@ namespace laboratorium_10
            
 
         }
-
+        public static void Write(ArrayList list)
+        {
+            foreach (var item in list)
+            {
+                Write(item.ToString());
+            }
+        }
         public static void Write<T>(List<T> list)
         {
             foreach(var item in list)
