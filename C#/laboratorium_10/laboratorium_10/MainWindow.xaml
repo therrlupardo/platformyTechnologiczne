@@ -9,19 +9,34 @@
     <Grid>
         <DataGrid Name="dataGridView1" HorizontalAlignment="Left" Height="354" Margin="10,35,0,0"
                   VerticalAlignment="Top" Width="772" CanUserResizeColumns="False" 
-                  AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False" CanUserSortColumns="False">
+                  AutoGenerateColumns="False" CanUserAddRows="True" CanUserReorderColumns="False"
+                  CanUserSortColumns="False" AlternatingRowBackground="LightGray">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
+                        <DataTemplate>
                             <Button Click="ButtonDeleteRow" Content="X"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
-                <DataGridTextColumn Header="Model" Binding="{Binding model}"/>
-                <DataGridTextColumn Header="Motor" Binding="{Binding motor}"/>
-                <DataGridTextColumn Header="Year" Binding="{Binding year}" />
+                <DataGridTextColumn Header="Model" Binding="{Binding Path=model}"/>
+                <DataGridTemplateColumn Header="Motor">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=motor}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate >
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBox Text="{Binding Path=motor.model}"/>
+                                <TextBox Text="{Binding Path=motor.displacement}"/>
+                                <TextBox Text="{Binding Path=motor.horsePower}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Year" Binding="{Binding Path=year}" />
             </DataGrid.Columns>
             <DataGrid.Resources>
                 <Style TargetType="DataGridColumnHeader">

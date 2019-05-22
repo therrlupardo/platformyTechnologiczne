@@ -112,6 +112,7 @@ namespace laboratorium_10
                     UpdateDataGrid();
                     break;
                 }
+            
         }
 
         private void UpdateDataGrid()
@@ -131,8 +132,7 @@ namespace laboratorium_10
             comboBox.ItemsSource = list;
             comboBox.SelectedIndex = 0;
         }
-        
-        
 
+       
     }
 }

@@ -13,7 +13,6 @@ namespace laboratorium_10
 
         public string model { get; set; }
 
-
         public Engine() { }
         public Engine(double displacement, int horsePower, string model)
         {
