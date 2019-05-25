@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -184,8 +186,33 @@ namespace laboratorium_11
        
 
         private void ButtonClick_Resolve(object sender, RoutedEventArgs e) { }
-        private void ButtonClick_Compress(object sender, RoutedEventArgs e) { }
-        private void ButtonClick_Decompress(object sender, RoutedEventArgs e) { }
+        private void ButtonClick_Compress(object sender, RoutedEventArgs e)
+        {
+            var dialog = new FolderBrowserDialog()
+            {
+                Description = "Select directory to compress"
+            };
+            DialogResult result = dialog.ShowDialog();
+            if(result == System.Windows.Forms.DialogResult.OK)
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(dialog.SelectedPath);
+                Compresser.CompressDirectory(directoryInfo);
+            }
+
+        }
+        private void ButtonClick_Decompress(object sender, RoutedEventArgs e)
+        {
+            var dialog = new FolderBrowserDialog()
+            {
+                Description = "Select directory to decompress"
+            };
+            DialogResult result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(dialog.SelectedPath);
+                Compresser.DecompressDirectory(directoryInfo);
+            }
+        }
         private void ButtonClick_Check(object sender, RoutedEventArgs e) { }
         private void LabelDoubleClick_ClearErrorLabel(object sender, RoutedEventArgs e)
         {
