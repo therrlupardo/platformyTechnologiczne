@@ -57,10 +57,12 @@ namespace laboratorium_11
 
         public async Task<double> CalculateAsyncAwait()
         {
-            double counter = await Task.Run(() => CalculateCounter());
-            double denominator = await Task.Run(() => CalculateDenominator());
+            var counter = Task.Run(() => CalculateCounter());
+            var denominator =Task.Run(() => CalculateDenominator());
 
-            return counter / denominator;
+            await Task.WhenAll(counter, denominator);
+
+            return counter.Result / denominator.Result;
         }
 
 
