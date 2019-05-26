@@ -185,7 +185,16 @@ namespace laboratorium_11
 
        
 
-        private void ButtonClick_Resolve(object sender, RoutedEventArgs e) { }
+        private void ButtonClick_Resolve(object sender, RoutedEventArgs e)
+        {
+            var domainList = DomainConverter.ConvertDomains();
+            textBox_output.Text = "";
+            foreach(var domain in domainList)
+            {
+                textBox_output.Text += $"{domain.Item1} => {domain.Item2}\n";
+            }
+
+        }
         private void ButtonClick_Compress(object sender, RoutedEventArgs e)
         {
             var dialog = new FolderBrowserDialog()
@@ -213,7 +222,6 @@ namespace laboratorium_11
                 Compresser.DecompressDirectory(directoryInfo);
             }
         }
-        private void ButtonClick_Check(object sender, RoutedEventArgs e) { }
         private void LabelDoubleClick_ClearErrorLabel(object sender, RoutedEventArgs e)
         {
             SetErrorLabel("");

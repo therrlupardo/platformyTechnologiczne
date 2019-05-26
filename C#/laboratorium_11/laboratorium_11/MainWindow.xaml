@@ -36,9 +36,9 @@
         <Label Content="Kompresja&#xD;&#xA;" HorizontalAlignment="Left" Margin="229,120,0,0" VerticalAlignment="Top" Width="71" Height="26"/>
         <Button Content="Compress" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Margin="229,151,0,0" Click="ButtonClick_Compress"/>
         <Button Content="Decompress" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Margin="312,151,0,0" Click="ButtonClick_Decompress"/>
-        <Label Content="Responsywność&#xD;&#xA;&#xA;" HorizontalAlignment="Left" Margin="232,222,0,0" VerticalAlignment="Top" Width="100" Height="26"/>
+        <!--<Label Content="Responsywność&#xD;&#xA;&#xA;" HorizontalAlignment="Left" Margin="232,222,0,0" VerticalAlignment="Top" Width="100" Height="26"/>
         <Button Content="Check" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Margin="332,225,0,0" Click="ButtonClick_Check"/>
-        <TextBox Name="textBox_responsive" HorizontalAlignment="Left" Height="23" Margin="232,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100"/>
+        <TextBox Name="textBox_responsive" HorizontalAlignment="Left" Height="23" Margin="232,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100"/>-->
         <Label Name="label_error" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="38,6,0,0" Width="402" Foreground="Red" MouseDoubleClick="LabelDoubleClick_ClearErrorLabel"/>
     </Grid>
 </Window>
