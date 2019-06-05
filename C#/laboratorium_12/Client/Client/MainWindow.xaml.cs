@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace Client
@@ -43,6 +44,7 @@ namespace Client
             _clientsPoints = new Dictionary<byte, ColoredPoint>();
             _lines = new List<LineCanvasStruct>();
             _listPrevLength = 0;
+            
         }
 
 
@@ -153,6 +155,7 @@ namespace Client
         {
             try
             {
+                
                 var client = _clientsPoints[id];
                 client.Point = new Point(0);
             }
@@ -165,7 +168,8 @@ namespace Client
         {
             try
             {
-                this.Dispatcher.Invoke(new Action(() =>
+                MyCanvas.Dispatcher.Invoke(DispatcherPriority.Background,
+                    new Action(() =>
                     {
                         var client = _clientsPoints[id];
                         byte[] position = new byte[4];
@@ -177,25 +181,21 @@ namespace Client
                         }
                         Brush brush = new SolidColorBrush(
                             System.Windows.Media.Color.FromRgb(
-                                _myColor.R,
-                                _myColor.G,
-                                _myColor.B));
-                        brush = new SolidColorBrush(
-                            System.Windows.Media.Color.FromRgb(
-                                255,
-                                0,
-                                0));
+                                client.Color.R,
+                                client.Color.G,
+                                client.Color.B));
 
                         Line line = new Line()
                         {
-                            X1 = client.Point.X,
+                            X1 = point.X-5.0f,
                             X2 = point.X,
-                            Y1 = client.Point.Y,
+                            Y1 = point.Y-5.0f,
                             Y2 = point.Y,
                             Stroke = brush,
                             StrokeThickness = 5.0f
                         };
-                        Debug.WriteLine($"Attempt to draw line from ({line.X1}, {line.Y1}) to ({line.X2}, {line.Y2})");
+                        Debug.WriteLine($"Attempt to draw line from ({line.X1}, {line.Y1}) to ({line.X2}, {line.Y2})."+
+                                                  $"Brush color {client.Color.R}:{client.Color.G}:{client.Color.B}");
                         MyCanvas.Children.Add(line);
                     }));
 
