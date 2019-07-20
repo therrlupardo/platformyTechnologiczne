@@ -1,45 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace laboratorium_11
 {
     /// <summary>
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private NewtonSymbol newtonSymbol;
-        private int highestPercentageReached;
+        private NewtonSymbol _newtonSymbol;
+        private int _highestPercentageReached;
         public MainWindow()
         {
             InitializeComponent();
         }
-        private void ButtonClick_NetwonSymbolTasks(object sender, RoutedEventArgs e)
+        private void ButtonClick_NewtonSymbolTasks(object sender, RoutedEventArgs e)
         {
             int k, n;
-            if (!Int32.TryParse(textBox_n.Text, out n) || !Int32.TryParse(textBox_k.Text, out k))
+            if (!Int32.TryParse(TextBoxN.Text, out n) || !Int32.TryParse(TextBoxK.Text, out k))
             {
                 SetErrorLabel("Aby obliczyć wartość Symbolu Newtona musisz najpierw ustawić n i k!");
                 return;
             }
-            newtonSymbol = new NewtonSymbol(n, k);
-            double result = newtonSymbol.CalculateTasks();
+            _newtonSymbol = new NewtonSymbol(n, k);
+            double result = _newtonSymbol.CalculateTasks();
             switch (result)
             {
                 case -1:
@@ -49,22 +40,22 @@ namespace laboratorium_11
                     SetErrorLabel("k nie może być większe niż n!");
                     break;
                 default:
-                    textBox_tasks.Text = result.ToString();
+                    TextBoxTasks.Text = result.ToString(CultureInfo.InvariantCulture);
                     SetErrorLabel("");
                     break;
             }
             
         }
-        private void ButtonClick_NetwonSymbolDelegates(object sender, RoutedEventArgs e)
+        private void ButtonClick_NewtonSymbolDelegates(object sender, RoutedEventArgs e)
         {
             int k, n;
-            if (!Int32.TryParse(textBox_n.Text, out n) || !Int32.TryParse(textBox_k.Text, out k))
+            if (!Int32.TryParse(TextBoxN.Text, out n) || !Int32.TryParse(TextBoxK.Text, out k))
             {
                 SetErrorLabel("Aby obliczyć wartość Symbolu Newtona musisz najpierw ustawić n i k!");
                 return;
             }
-            newtonSymbol = new NewtonSymbol(n, k);
-            double result = newtonSymbol.CalculateDelegates();
+            _newtonSymbol = new NewtonSymbol(n, k);
+            double result = _newtonSymbol.CalculateDelegates();
             switch (result)
             {
                 case -1:
@@ -74,21 +65,21 @@ namespace laboratorium_11
                     SetErrorLabel("k nie może być większe niż n!");
                     break;
                 default:
-                    textBox_delegates.Text = result.ToString();
+                    TextBoxDelegates.Text = result.ToString(CultureInfo.InvariantCulture);
                     SetErrorLabel("");
                     break;
             }
         }
-        private async void ButtonClick_NetwonSymbolAsyncAwait(object sender, RoutedEventArgs e)
+        private async void ButtonClick_NewtonSymbolAsyncAwait(object sender, RoutedEventArgs e)
         {
             int k, n;
-            if (!Int32.TryParse(textBox_n.Text, out n) || !Int32.TryParse(textBox_k.Text, out k))
+            if (!Int32.TryParse(TextBoxN.Text, out n) || !Int32.TryParse(TextBoxK.Text, out k))
             {
                 SetErrorLabel("Aby obliczyć wartość Symbolu Newtona musisz najpierw ustawić n i k!");
                 return;
             }
-            newtonSymbol = new NewtonSymbol(n, k);
-            double result = await newtonSymbol.CalculateAsyncAwait();
+            _newtonSymbol = new NewtonSymbol(n, k);
+            double result = await _newtonSymbol.CalculateAsyncAwait();
             switch (result)
             {
                 case -1:
@@ -98,7 +89,7 @@ namespace laboratorium_11
                     SetErrorLabel("k nie może być większe niż n!");
                     break;
                 default:
-                    textBox_async_await.Text = result.ToString();
+                    TextBoxAsyncAwait.Text = result.ToString(CultureInfo.InvariantCulture);
                     SetErrorLabel("");
                     break;
             }
@@ -107,39 +98,49 @@ namespace laboratorium_11
         private void ButtonClick_Get(object sender, RoutedEventArgs e)
         {
             int i;
-            if(!Int32.TryParse(textBox_i.Text, out i))
+            if(!Int32.TryParse(TextBoxI.Text, out i))
             {
                 SetErrorLabel("Aby obliczyć i-ty element ciągu fibonacciego musisz podać i!");
+                return;
+            }
+
+            if (i <= 0)
+            {
+                SetErrorLabel("Indeks musi być większy od 0!");
+                return;
             }
             BackgroundWorker fibonacciWorker = new BackgroundWorker();
-            fibonacciWorker.DoWork += new DoWorkEventHandler(fibonacciWorker_DoWork);
-            fibonacciWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(fibonacciWorker_RunWorkerCompleted);
-            fibonacciWorker.ProgressChanged += new ProgressChangedEventHandler(fibonacciWorker_ProgressChanged);
-            highestPercentageReached = 0;
-            progressBar.Value = 0;
+            fibonacciWorker.DoWork += fibonacciWorker_DoWork;
+            fibonacciWorker.RunWorkerCompleted += fibonacciWorker_RunWorkerCompleted;
+            fibonacciWorker.ProgressChanged += fibonacciWorker_ProgressChanged;
+            _highestPercentageReached = 0;
+            ProgressBar.Value = 0;
             fibonacciWorker.RunWorkerAsync(i);
         }
 
         private void fibonacciWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            worker.WorkerReportsProgress = true;
-            e.Result = ComputeFibonacci((int)e.Argument, worker, e);
+            if (worker != null)
+            {
+                worker.WorkerReportsProgress = true;
+                e.Result = ComputeFibonacci((int) e.Argument, worker, e);
+            }
         }
 
         private void fibonacciWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            textBox_fibonacci.Text = e.Result.ToString();
+            TextBoxFibonacci.Text = e.Result.ToString();
         }
 
         private void fibonacciWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar.Value = e.ProgressPercentage;
+            ProgressBar.Value = e.ProgressPercentage;
         }
 
         private UInt64 ComputeFibonacci(int n, BackgroundWorker worker, DoWorkEventArgs e)
         {
-            if(n < 0)
+            if(n <= 0)
             {
                 SetErrorLabel("Ciąg Fibonacciego można policzyć tylko dla i > 0!");
                 return 0;
@@ -169,9 +170,9 @@ namespace laboratorium_11
                         listOfFibonacciElements.Add(a + b);
                     }
                     int percentComplete = (int)((float)i / n * 100);
-                    if (percentComplete > highestPercentageReached)
+                    if (percentComplete > _highestPercentageReached)
                     {
-                        highestPercentageReached = percentComplete;
+                        _highestPercentageReached = percentComplete;
                         worker.ReportProgress(percentComplete);
                         Thread.Sleep(20);
                     }
@@ -188,10 +189,10 @@ namespace laboratorium_11
         private void ButtonClick_Resolve(object sender, RoutedEventArgs e)
         {
             var domainList = DomainConverter.ConvertDomains();
-            textBox_output.Text = "";
+            TextBoxOutput.Text = "";
             foreach(var domain in domainList)
             {
-                textBox_output.Text += $"{domain.Item1} => {domain.Item2}\n";
+                TextBoxOutput.Text += $"{domain.Item1} => {domain.Item2}\n";
             }
 
         }
@@ -199,7 +200,7 @@ namespace laboratorium_11
         {
             var dialog = new FolderBrowserDialog()
             {
-                Description = "Select directory to compress"
+                Description = Properties.Resources.MainWindow_ButtonClick_Compress_Select_directory_to_compress
             };
             DialogResult result = dialog.ShowDialog();
             if(result == System.Windows.Forms.DialogResult.OK)
@@ -213,7 +214,7 @@ namespace laboratorium_11
         {
             var dialog = new FolderBrowserDialog()
             {
-                Description = "Select directory to decompress"
+                Description = Properties.Resources.MainWindow_ButtonClick_Decompress_Select_directory_to_decompress
             };
             DialogResult result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
@@ -229,12 +230,7 @@ namespace laboratorium_11
 
         private void SetErrorLabel(string error)
         {
-            label_error.Content = error;
-        }
-
-        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
+            LabelError.Content = error;
         }
     }
 }

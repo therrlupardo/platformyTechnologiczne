@@ -38,7 +38,7 @@ namespace lab8
             if(result == System.Windows.Forms.DialogResult.OK)
             {
                 treeView.Items.Clear();
-                var parts = dlg.SelectedPath.Split('\\');
+                //var parts = dlg.SelectedPath.Split('\\');
                 DirectoryInfo dir = new DirectoryInfo(dlg.SelectedPath);
                 var root = MakeTreeDirectory(dir);
                 treeView.Items.Add(root);

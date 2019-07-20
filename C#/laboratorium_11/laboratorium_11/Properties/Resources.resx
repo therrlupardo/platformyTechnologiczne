@@ -114,4 +114,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MainWindow_ButtonClick_Compress_Select_directory_to_compress" xml:space="preserve">
+    <value>Select directory to compress</value>
+  </data>
+  <data name="MainWindow_ButtonClick_Decompress_Select_directory_to_decompress" xml:space="preserve">
+    <value>Select directory to decompress</value>
+  </data>
 </root>
